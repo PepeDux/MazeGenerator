@@ -1,0 +1,13 @@
+﻿<Window x:Name="Window" x:Class="MazeGenerator.MainWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MazeGenerator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="616" Loaded="Window_Loaded">
+
+
+    <Canvas x:Name="MainCanvas"  />
+
+</Window>
