@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MazeGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="616" Loaded="Window_Loaded">
+        Title="MainWindow" Height="1000" Width="786" Loaded="Window_Loaded">
 
+    <Grid>
+        <Canvas x:Name="MainCanvas" Height="786" Margin="0,0,0,198">
+            
+        </Canvas>
+    </Grid>
 
-    <Canvas x:Name="MainCanvas"  />
 
 </Window>
