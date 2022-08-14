@@ -24,11 +24,30 @@ namespace MazeGenerator
 
         const int scale = 10;
 
+
+        int buf = 1;
+
         int MapX = 15 * scale;
         int MapY = 15 * scale;
 
-        int[,] FreePoint = new int[770, 770];
+        int StartPointX = 0;
+        int StartPointY = 0;
 
+        int[,] FreePoint = new int[2, 77];
+        int[] FreePointID = new int[77 / 2 ];
+
+        int[,] AvailablePoint = new int[2, 77];
+        int[] AvaillblePointId = new int[77 / 2];
+
+        int[][] Dvizh = {
+            new int[] { +scale, 0 },
+            new int[] { -scale, 0 },
+            new int[] { 0, +scale },
+            new int[] { 0, -scale }
+        };
+
+        int DvizhBuf;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -38,60 +57,44 @@ namespace MazeGenerator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < MapX; i = i + scale) 
+            for (int i = 0; i < MapX; i = i + scale)
             {
-                for (int j = 0; j < MapY; j = j + scale) 
+                for (int j = 0; j < MapY; j = j + scale)
                 {
                     Rectangle rectangle = CreateRectangel(new Point(i, j), Brushes.DarkGreen);
-                    MainCanvas.Children.Add(rectangle);                 
+                    MainCanvas.Children.Add(rectangle);
                 }
             }
 
-            for (int i = 0; i < MapX / scale; i++) 
+            for (int i = 0; i < MapX / scale; i++)
             {
-                for (int j = 0; j < MapY / scale; j++)                    
+                for (int j = 0; j < MapY / scale; j++)
                 {
                     if (i % 2 == 1 && j % 2 == 1)
                     {
                         Rectangle rectangle1 = CreateRectangel(new Point(scale * i, scale * j), Brushes.Bisque);
                         MainCanvas.Children.Add(rectangle1);
 
-                        //FreePoint[i * scale, j * scale] = i * scale;
-                        //FreePoint[j * scale, i * scale] = j * scale;
-                    }                   
+                        FreePoint[0, i] = i * scale;
+                        FreePoint[1, j] = j * scale;
+                    }
                 }
             }
 
-            //Rectangle rectangle2 = CreateRectangel(new Point(FreePoint[150, 10], FreePoint[10, 150]), Brushes.Blue);
-            //MainCanvas.Children.Add(rectangle2);
+            for (int i = 0; i < MapX / scale; i++)
+            {
+                for (int j = 0; j < MapY / scale; j++)
+                {
+                    AvailablePoint[0, i] = i * scale;
+                    AvailablePoint[1, j] = j * scale;                   
+                }
+            }
 
-
-
-
-
-            /* for (int i = 0; i < MapX + scale; i = i + scale)
-             {
-                 Rectangle rectangle = CreateRectangel(new Point(i + scale, 0), Brushes.Green);
-                 MainCanvas.Children.Add(rectangle);
-             }//Верхняя стенка
-
-             for (int i = 0; i < MapX + scale * 2; i = i + scale)
-             {
-                 Rectangle rectangle = CreateRectangel(new Point(i, MapY + scale), Brushes.Green);
-                 MainCanvas.Children.Add(rectangle);
-             }//Нижняя стенка
-
-             for (int i = 0; i < MapY + scale; i = i + scale)
-             {
-                 Rectangle rectangle = CreateRectangel(new Point(0, i), Brushes.Green);
-                 MainCanvas.Children.Add(rectangle);
-             }//Левая строчка            
-
-             for (int i = 0; i < MapY + scale; i = i + scale)
-             {
-                 Rectangle rectangle = CreateRectangel(new Point(MapX + scale, i), Brushes.Green);
-                 MainCanvas.Children.Add(rectangle);
-             }//Правая стенка*/
+            for (int i = 0; i < (MapX / scale) / 2; i++)
+            {
+                FreePointID[i] = buf;
+                buf += 2;
+            }
         }
 
         private Rectangle CreateRectangel(Point point, Brush brush)
@@ -122,6 +125,25 @@ namespace MazeGenerator
             Canvas.SetTop(rectangle2, point.Y);
 
             return rectangle2;
-        }   
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StartPointX = FreePoint[0, FreePointID[random.Next(0, 7)]];
+            StartPointY = FreePoint[1, FreePointID[random.Next(0, 7)]];
+
+            DvizhBuf = random.Next(0, 4);
+
+            Rectangle rectangle2 = CreateRectangel(new Point(StartPointX, StartPointY), Brushes.Red);
+            MainCanvas.Children.Add(rectangle2);
+
+            for (int i = 0; i < 4; i++)
+            {
+                //AvailablePoint += StartPointX + Dvizh[i][0] * 2, StartPointY + Dvizh[i][1] * 2;
+
+                Rectangle rectangle = CreateRectangel(new Point(StartPointX + Dvizh[i][0]*2, StartPointY + Dvizh[i][1]*2), Brushes.Blue);
+                MainCanvas.Children.Add(rectangle);
+            }
+        }
     }
 }
