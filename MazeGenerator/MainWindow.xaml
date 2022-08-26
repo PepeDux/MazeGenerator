@@ -11,7 +11,7 @@
         <Canvas x:Name="MainCanvas" Height="786" Margin="0,0,0,198">
             
         </Canvas>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="237,880,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="237,880,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 
 
