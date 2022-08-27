@@ -43,10 +43,10 @@ namespace MazeGenerator
         int[,] Point = new int[1444, 1444];
 
         int[][] Dvizh = {
-            new int[] { +scale, 0 },
-            new int[] { -scale, 0 },
-            new int[] { 0, +scale },
-            new int[] { 0, -scale }
+            new int[] { +1, 0 },
+            new int[] { -1, 0 },
+            new int[] { 0, +1 },
+            new int[] { 0, -1 }
         };  //Массив для выполнения движения действий в одном из анправлений
 
         int DvizhBuf;   //Просто буфер
@@ -84,22 +84,34 @@ namespace MazeGenerator
                 }
             }   //Распологает на поле точки соединения лабиринта
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 1; i < MapX; i += 2) 
             {
-                for (int j = 0; j < 15; j++)
+                for (int j = 1; j < MapY; j += 2) 
                 {
-                    Point[i, j] = random.Next(0, 2);
+                    Point[i, j] = 1;
                 }
             }   //Распологает на поле точки соединения лабиринта
 
+            StartPointX = 5;
+            StartPointY = 5;
 
+            Point[StartPointX, StartPointY] = 3;
 
+            Rectangle rectangle2 = CreateRectangel(new Point(StartPointX * scale, StartPointY * scale), Brushes.RosyBrown);
+            MainCanvas.Children.Add(rectangle2);
 
+            for (int j = 0; j < 4; j++)
+            {
+                if (StartPointX + (Dvizh[j][0] * 2) <= 0 || StartPointY + (Dvizh[j][1] * 2) <= 0)
+                {
 
+                }
 
-
-
-
+                else
+                {
+                    Point[StartPointX + (Dvizh[j][0] * 2), StartPointY + (Dvizh[j][1] * 2)] = 2;                  
+                }
+            }
 
         }
         public void MazeFrame()
@@ -186,18 +198,60 @@ namespace MazeGenerator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 4000; i++)
+            
+
+            
+            for (int i = 0; i < 100; i++)
             {
                 BufX = random.Next(1, MapX / scale);
                 BufY = random.Next(1, MapY / scale);
 
-                if (Point[BufX, BufY] == 0 && BufX % 2 == 1 && BufY % 2 == 1)
+                if (Point[BufX, BufY] == 2)
                 {
-                    Rectangle rectangle = CreateRectangel(new Point(BufX * scale, BufY * scale), Brushes.RosyBrown) ;
-                    MainCanvas.Children.Add(rectangle);
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if (BufX + (Dvizh[j][0] * 2) <= 0 || BufY + (Dvizh[j][1] * 2) <= 0)
+                        {
+
+                        }
+
+                        else
+                        {
+                            if (Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 2 || Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 1)
+                            {
+                                Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] = 2;
+
+                                Rectangle rectangle2 = CreateRectangel(new Point((BufX + Dvizh[j][0] * 2) * scale, (BufY + Dvizh[j][1] * 2) * scale), Brushes.RosyBrown);
+                                MainCanvas.Children.Add(rectangle2);
+                            }
+
+                            if (Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 3)
+                            {
+                                Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] = 3;
+
+                                Rectangle rectangle2 = CreateRectangel(new Point((BufX + Dvizh[j][0] * 2) * scale, (BufY + Dvizh[j][1] * 2) * scale), Brushes.RosyBrown);
+                                MainCanvas.Children.Add(rectangle2);
+
+                                Rectangle rectangle3 = CreateRectangel(new Point((BufX + Dvizh[j][0]) * scale, (BufY + Dvizh[j][1]) * scale), Brushes.RosyBrown);
+                                MainCanvas.Children.Add(rectangle3);
+
+                            }
+                        }
+
+                        
+                    }
+                }
+
+                if (Point[BufX, BufY] == 2)
+                {
+
                 }
             }
-           
+
+
+
+
+
             /*for (int i = 0; i < 10; i++)
             {
                 DvizhBuf = random.Next(0, 4); //Записывает случайное действие из массива
