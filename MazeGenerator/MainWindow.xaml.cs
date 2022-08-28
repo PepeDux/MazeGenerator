@@ -16,31 +16,24 @@ using System.Windows.Shapes;
 
 namespace MazeGenerator
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
+
     public partial class MainWindow : Window
     {
         Random random = new Random();
 
-        const int scale = 10;
+        const int scale = 10; //Рвзсер одной клетки в пикселях
 
+        int MapX = 77 * scale; //Ширина лабиринат
+        int MapY = 77 * scale; //Высота лабиринта
 
-        int buf = 1;
-
-        int MapX = 15 * scale; //Ширина лабиринат
-        int MapY = 15 * scale; //Высота лабиринта
-
-        int ConnectingPointX; //Колличество точек соединения по Х
-        int ConnectingPointY; //Колличество точек соединения по Y
-
-        int BufX = 0;
-        int BufY = 0;
+        int BufX = 0; //Х точки 
+        int BufY = 0; //Y точки
 
         int StartPointX = 0; // Стартовая позиция начал лабиринта
         int StartPointY = 0; // Стартовая позиция начал лабиринта
 
-        int[,] Point = new int[1444, 1444];
+        int[,] Point = new int[1444, 1444]; // Массив значений поля
 
         int[][] Dvizh = {
             new int[] { +1, 0 },
@@ -49,14 +42,16 @@ namespace MazeGenerator
             new int[] { 0, -1 }
         };  //Массив для выполнения движения действий в одном из анправлений
 
-        int DvizhBuf;   //Просто буфер
+        int DvizhBuf;   //Буфер движения
 
+       
         public MainWindow()
         {
             InitializeComponent();
 
+           
 
-
+           
         }
 
         public void MazeGenerate()
@@ -88,14 +83,14 @@ namespace MazeGenerator
             {
                 for (int j = 1; j < MapY; j += 2) 
                 {
-                    Point[i, j] = 1;
+                    Point[i, j] = 2;
                 }
             }   //Распологает на поле точки соединения лабиринта
 
-            StartPointX = 5;
-            StartPointY = 5;
+            StartPointX = 1; //Задает X стартовой точки
+            StartPointY = 1; //Задает Y стартовой точки
 
-            Point[StartPointX, StartPointY] = 3;
+            Point[StartPointX, StartPointY] = 3;//Задает точке ее принадлежность
 
             Rectangle rectangle2 = CreateRectangel(new Point(StartPointX * scale, StartPointY * scale), Brushes.RosyBrown);
             MainCanvas.Children.Add(rectangle2);
@@ -151,7 +146,7 @@ namespace MazeGenerator
                 Rectangle rectangle = CreateRectangel(new Point(MapX, i), Brushes.White);
                 MainCanvas.Children.Add(rectangle);
             }//Правая белая стенка
-        }       
+        }//Отрисовывает рамку вокруг лабиринта(НЕ АКТУАЛЬНО)
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MazeGenerate();
@@ -198,10 +193,7 @@ namespace MazeGenerator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-
-            
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 300000; i++)
             {
                 BufX = random.Next(1, MapX / scale);
                 BufY = random.Next(1, MapY / scale);
@@ -210,78 +202,90 @@ namespace MazeGenerator
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        if (BufX + (Dvizh[j][0] * 2) <= 0 || BufY + (Dvizh[j][1] * 2) <= 0)
+                        /*if (BufX + (Dvizh[j][0] * 2) < 0 || BufY + (Dvizh[j][1] * 2) < 0)
                         {
 
                         }
 
                         else
                         {
-                            if (Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 2 || Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 1)
+                            if (Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 2)
                             {
                                 Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] = 2;
-
-                                Rectangle rectangle2 = CreateRectangel(new Point((BufX + Dvizh[j][0] * 2) * scale, (BufY + Dvizh[j][1] * 2) * scale), Brushes.RosyBrown);
-                                MainCanvas.Children.Add(rectangle2);
                             }
+                        }*/
 
-                            if (Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] == 3)
+                        DvizhBuf = random.Next(0, 4); //Задает случайное соединение с соседними клетками
+
+                        if (BufX + (Dvizh[DvizhBuf][0] * 2) < 0 || BufY + (Dvizh[DvizhBuf][1] * 2) < 0)
+                        {
+
+                        }//Исключает значения координат < 0
+
+                        else
+                        {
+                            if (Point[BufX + (Dvizh[DvizhBuf][0] * 2), BufY + (Dvizh[DvizhBuf][1] * 2)] == 3)
                             {
-                                Point[BufX + (Dvizh[j][0] * 2), BufY + (Dvizh[j][1] * 2)] = 3;
+                                Point[BufX, BufY] = 3;//Присваивается клетке ее занятость
+                               
+                                //Отрисовывает клетку начала соединения
+                                Rectangle rectangle = CreateRectangel(new Point(BufX*scale, BufY*scale), Brushes.RosyBrown);
+                                MainCanvas.Children.Add(rectangle);
 
-                                Rectangle rectangle2 = CreateRectangel(new Point((BufX + Dvizh[j][0] * 2) * scale, (BufY + Dvizh[j][1] * 2) * scale), Brushes.RosyBrown);
-                                MainCanvas.Children.Add(rectangle2);
+                                //Отрисовывыает среднюю клетку соединения
+                                Rectangle rectangle1 = CreateRectangel(new Point((BufX + Dvizh[DvizhBuf][0]) * scale, (BufY + Dvizh[DvizhBuf][1]) * scale), Brushes.RosyBrown);
+                                MainCanvas.Children.Add(rectangle1);
 
-                                Rectangle rectangle3 = CreateRectangel(new Point((BufX + Dvizh[j][0]) * scale, (BufY + Dvizh[j][1]) * scale), Brushes.RosyBrown);
-                                MainCanvas.Children.Add(rectangle3);
 
+                                break; //Выхож из цикла при первом возможном соединении
                             }
                         }
-
-                        
                     }
                 }
+            }
 
-                if (Point[BufX, BufY] == 2)
+            Pixel finnish = new Pixel();
+            finnish.X = 1;
+            finnish.Y = 1;
+            finnish.color = ConsoleColor.Red;
+
+            Pixel chel = new Pixel();
+            chel.X = 1;
+            chel.Y = 1;
+            chel.color = ConsoleColor.DarkBlue;
+
+            Pixel start = new Pixel();
+            start.X = 1;
+            start.Y = 1;
+            start.color = ConsoleColor.Green;
+
+            for (int i = 0; i < 1000; i++)
+            {
+                for (int j = 0; j < 4; j++)
                 {
+                    DvizhBuf = random.Next(0, 4);
 
+                    if (BufX + (Dvizh[DvizhBuf][0] * 2) < 0 || BufY + (Dvizh[DvizhBuf][1] * 2) < 0)
+                    {
+
+                    }//Исключает значения координат < 0
+
+                    else
+                    {
+                        if (Point[BufX + (Dvizh[DvizhBuf][0] * 2), BufY + (Dvizh[DvizhBuf][1] * 2)] == 3)
+                        {
+                            Point[BufX, BufY] = 3;//Присваивается клетке ее занятость                            
+
+                            //Отрисовывыает среднюю клетку соединения
+                            Rectangle rectangle1 = CreateRectangel(new Point((chel.X =+ Dvizh[DvizhBuf][0]) * scale, (chel.Y + Dvizh[DvizhBuf][1]) * scale), Brushes.DarkBlue);
+                            MainCanvas.Children.Add(rectangle1);
+
+
+                            break; //Выхож из цикла при первом возможном соединении
+                        }
+                    }
                 }
             }
-
-
-
-
-
-            /*for (int i = 0; i < 10; i++)
-            {
-                DvizhBuf = random.Next(0, 4); //Записывает случайное действие из массива
-
-                Rectangle rectangle = CreateRectangel(new Point(BufX, BufY), Brushes.RosyBrown);
-                MainCanvas.Children.Add(rectangle);
-
-                Rectangle rectangle1 = CreateRectangel(new Point(BufX + Dvizh[DvizhBuf][0], BufY + Dvizh[DvizhBuf][1]), Brushes.RosyBrown);
-                MainCanvas.Children.Add(rectangle1);
-
-                Rectangle rectangle2 = CreateRectangel(new Point(BufX + Dvizh[DvizhBuf][0] * 2, BufY + Dvizh[DvizhBuf][1] * 2), Brushes.RosyBrown);
-                MainCanvas.Children.Add(rectangle2);
-            }*/
-
-            MazeFrame();
-
-
-            /*if(FreePoint[0, StartPointX + Dvizh[i][0
-                ]] == StartPointX + Dvizh[i][0] * 2 && FreePoint[1, StartPointX + Dvizh[i][1]] == StartPointX + Dvizh[i][1] * 2)
-            {
-                 AvailablePoint[0, StartPointX + Dvizh[i][0]] = 0;
-                 AvailablePoint[1, StartPointX + Dvizh[i][1]] = 0;
-                 FreePoint[0, StartPointX + Dvizh[i][0]] = 0;
-                 FreePoint[1, StartPointX + Dvizh[i][1]] = 0;
-            }
-             Rectangle rectangle = CreateRectangel(new Point(StartPointX + Dvizh[i][0]*2, StartPointY + Dvizh[i][1]*2), Brushes.Blue);
-             MainCanvas.Children.Add(rectangle);*/
-
-
-
         }
     }
 }
