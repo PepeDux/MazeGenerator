@@ -12,6 +12,7 @@
             
         </Canvas>
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="237,880,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button x:Name="ChelButton" Content="Button" HorizontalAlignment="Left" Margin="457,880,0,0" VerticalAlignment="Top" Click="ChelButton_Click"/>
     </Grid>
 
 

@@ -33,6 +33,10 @@ namespace MazeGenerator
         int StartPointX = 0; // Стартовая позиция начал лабиринта
         int StartPointY = 0; // Стартовая позиция начал лабиринта
 
+        int ChelX = 1;
+        int ChelY = 1;
+
+
         int[,] Point = new int[1444, 1444]; // Массив значений поля
 
         int[][] Dvizh = {
@@ -227,7 +231,9 @@ namespace MazeGenerator
                             if (Point[BufX + (Dvizh[DvizhBuf][0] * 2), BufY + (Dvizh[DvizhBuf][1] * 2)] == 3)
                             {
                                 Point[BufX, BufY] = 3;//Присваивается клетке ее занятость
-                               
+                                Point[BufX + (Dvizh[DvizhBuf][0]), BufY + (Dvizh[DvizhBuf][1])] = 3;
+                                Point[BufX + (Dvizh[DvizhBuf][0]*2), BufY + (Dvizh[DvizhBuf][1])*2] = 3;
+
                                 //Отрисовывает клетку начала соединения
                                 Rectangle rectangle = CreateRectangel(new Point(BufX*scale, BufY*scale), Brushes.RosyBrown);
                                 MainCanvas.Children.Add(rectangle);
@@ -242,46 +248,40 @@ namespace MazeGenerator
                         }
                     }
                 }
-            }
+            }           
+        }
 
-            Pixel finnish = new Pixel();
-            finnish.X = 1;
-            finnish.Y = 1;
-            finnish.color = ConsoleColor.Red;
-
-            Pixel chel = new Pixel();
-            chel.X = 1;
-            chel.Y = 1;
-            chel.color = ConsoleColor.DarkBlue;
-
-            Pixel start = new Pixel();
-            start.X = 1;
-            start.Y = 1;
-            start.color = ConsoleColor.Green;
-
-            for (int i = 0; i < 1000; i++)
+        private void ChelButton_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 30; i++)
             {
+                Thread.Sleep(10);
                 for (int j = 0; j < 4; j++)
                 {
                     DvizhBuf = random.Next(0, 4);
 
-                    if (BufX + (Dvizh[DvizhBuf][0] * 2) < 0 || BufY + (Dvizh[DvizhBuf][1] * 2) < 0)
+
+                    if (ChelX + (Dvizh[DvizhBuf][0]) < 0 || ChelY + (Dvizh[DvizhBuf][1]) < 0)
                     {
 
                     }//Исключает значения координат < 0
 
                     else
                     {
-                        if (Point[BufX + (Dvizh[DvizhBuf][0] * 2), BufY + (Dvizh[DvizhBuf][1] * 2)] == 3)
+                        if (Point[ChelX + (Dvizh[DvizhBuf][0]), ChelY + (Dvizh[DvizhBuf][1])] == 3) 
                         {
-                            Point[BufX, BufY] = 3;//Присваивается клетке ее занятость                            
-
                             //Отрисовывыает среднюю клетку соединения
-                            Rectangle rectangle1 = CreateRectangel(new Point((chel.X =+ Dvizh[DvizhBuf][0]) * scale, (chel.Y + Dvizh[DvizhBuf][1]) * scale), Brushes.DarkBlue);
+                           
+                            Rectangle rectangle1 = CreateRectangel(new Point((ChelX + Dvizh[DvizhBuf][0]) * scale, (ChelY + Dvizh[DvizhBuf][1]) * scale), Brushes.Blue);
                             MainCanvas.Children.Add(rectangle1);
 
+                            ChelX += Dvizh[DvizhBuf][0];
+                            ChelY += Dvizh[DvizhBuf][1];
+
+                            
 
                             break; //Выхож из цикла при первом возможном соединении
+                                   
                         }
                     }
                 }
