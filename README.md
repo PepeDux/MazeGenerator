@@ -1,4 +1,7 @@
 # MazeGenerator
+
+![Static Badge](https://img.shields.io/badge/C%23-purple) ![Static Badge](https://img.shields.io/badge/WPF-blue)
+
 Генератор лабиринта написаннывй при помощи c# и сделанный на WPF.
 
 ## Пример генерации
